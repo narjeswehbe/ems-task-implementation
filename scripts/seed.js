@@ -18,13 +18,25 @@ const db = new sqlite3.Database(sqlitePath);
 
 const employees = [
   {
-    full_name: 'John Doe'
+    full_name: 'John Doe' , 
+    department:'Engineering' , 
+    salary:5000 , 
+    position:'Full Stack Developer' , 
+    date_of_birth:'02/02/2002'
   },
   {
-    full_name: 'Jane Smith'
+    full_name: 'Jane Smith',
+    department:'Engineering' , 
+    salary:5000 , 
+    position:'Full Stack Developer' , 
+    date_of_birth:'02/02/2002'
   },
   {
-    full_name: 'Alice Johnson'
+    full_name: 'Alice Johnson',
+    department:'Engineering' , 
+    salary:5000 , 
+    position:'Full Stack Developer' , 
+    date_of_birth:'02/02/2002'
   },
 ];
 
@@ -33,16 +45,21 @@ const timesheets = [
     employee_id: 1,
     start_time: '2025-02-10 08:00:00',
     end_time: '2025-02-10 17:00:00',
+    description:'backend development'
   },
   {
     employee_id: 2,
     start_time: '2025-02-11 12:00:00',
     end_time: '2025-02-11 17:00:00',
+    description:'frontend development'
+
   },
   {
     employee_id: 3,
     start_time: '2025-02-12 07:00:00',
     end_time: '2025-02-12 16:00:00',
+    description:'HR Meeting'
+
   },
 ];
 
