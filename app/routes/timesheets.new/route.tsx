@@ -60,7 +60,7 @@ export default function NewTimesheetPage() {
         {/* Start Time Picker */}
         <div>
           <label className="block text-sm font-medium">Start Time</label>
-          <Calendar className="calendar bg-white"  showIcon showTime appendTo={'self'} value={startTime} onChange={(e) => setStartTime(new Date(e.value?.toISOString() || ''))} />
+          <Calendar   className="calendar bg-grey"  showIcon showTime appendTo={'self'} value={startTime} onChange={(e) => setStartTime(new Date(e.value?.toISOString() || ''))} />
 
           <input type="hidden" name="start_time" value={startTime.toISOString()} />
         </div>

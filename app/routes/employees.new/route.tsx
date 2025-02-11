@@ -22,7 +22,6 @@ export const action: ActionFunction = async ({ request }) => {
   VALUES (?, ?, ?, ?, ?, ?, ?)
 `;
   
- let msgs = useRef(null);
   if (!full_name || !email || !phone_number || !dob || !position || !salary || !department) {
    
   }

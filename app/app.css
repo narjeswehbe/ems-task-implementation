@@ -29,3 +29,19 @@ body {
 body {
   font-family: "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
+
+/* Custom Table Styling */
+.custom-table .p-datatable-thead > tr > th,
+.custom-table .p-datatable-tbody > tr > td {
+  padding: 12px; /* Adjust cell padding */
+  border: 1px solid #ddd; /* Add a light border */
+}
+
+.custom-table .p-datatable-tbody > tr {
+  height: 50px; /* Increase row height */
+}
+
+.custom-table .p-datatable-thead > tr {
+  background-color: #f4f4f4; /* Light background for headers */
+}
+
