@@ -25,10 +25,7 @@ const employeeSchema = yup.object().shape({
 
 // Server-side action to handle form submission
 export const action: ActionFunction = async ({ request }) => {
-  console.log("Form submission started"); // Debugging
-
   const formData = await request.formData();
-
   const full_name = formData.get("full_name");
   const email = formData.get("email");
   const phone = formData.get("phone");
