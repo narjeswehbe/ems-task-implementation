@@ -82,6 +82,9 @@ export default function NewTimesheetPage() {
         <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
           Create Timesheet
         </button>
+        <button className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+           <a href="/timesheets"> Go Back </a>
+        </button>
       </Form>
     </div>
     </div>

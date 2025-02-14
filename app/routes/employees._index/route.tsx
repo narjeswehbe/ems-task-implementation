@@ -10,7 +10,7 @@ import { InputText } from "primereact/inputtext";
         
 export async function loader() {
   const db = await getDB()
-  const employees = await db.all("SELECT * FROM employees;")
+  const employees = await db.all("SELECT * FROM employees order by id desc;")
 
   return { employees }
 }
@@ -18,7 +18,7 @@ export async function loader() {
 export default function EmployeesPage() {
   const { employees } = useLoaderData()
   const columns = [
-    {field: 'id', header: 'ID'},
+    {field: 'email', header: 'Email'},
     {field: 'full_name', header: 'Name'},
     {field: 'date_of_birth', header: 'Date of Birth'},
     {field: 'position', header: 'Position'} ,
@@ -26,7 +26,7 @@ export default function EmployeesPage() {
 ];
 const [filters, setFilters] = useState({
   full_name: { value: null, matchMode: FilterMatchMode.CONTAINS },
-  id: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  email: { value: null, matchMode: FilterMatchMode.CONTAINS },
   position: { value: null, matchMode: FilterMatchMode.CONTAINS },
   date_of_birth: { value: null, matchMode: FilterMatchMode.CONTAINS },
 });
@@ -53,7 +53,7 @@ const [globalFilter, setGlobalFilter] = useState("");
             type="text"
             value={globalFilter}
             onChange={(e) => setGlobalFilter(e.target.value)}
-            placeholder="Search employees..."
+            placeholder="Search employees name..."
             className="p-inputtext-sm"
           />
         </span>
@@ -80,40 +80,7 @@ const [globalFilter, setGlobalFilter] = useState("");
 
             </DataTable>
             </div>
-        {/* <table className="table-auto w-full bg-white shadow-md rounded-lg border-grey">
-          <thead className="bg-gray-200">
-            <tr>
-              <th className="px-4 py-2 text-left">Employee ID</th>
-              <th className="px-4 py-2 text-left">Full Name</th>
-              <th className="px-4 py-2 text-left">Job Position</th>
-              <th className="px-4 py-2 text-left">Date of birth</th>
-              <th className="px-4 py-2 text-left">Department</th>
-              <th></th>
-
-
-
-            </tr>
-          </thead>
-          <tbody>
-            {employees.map((employee: any) => (
-              <tr key={employee.id}>
-                <td className="px-4 py-2 text-gray-800">{employee.id}</td>
-                <td className="px-4 py-2 text-gray-800">{employee.full_name}</td>
-                <td className="px-4 py-2 text-gray-800">{employee.position}</td>
-                <td className="px-4 py-2 text-gray-800">{employee.date_of_birth}</td>
-                <td className="px-4 py-2 text-gray-800">{employee.department}</td>
-                <td className="px-4 py-2">
-                    <a href={`/employees/${employee.id}`}>
-                      <button className="text-blue-500">Edit</button>
-                    </a>
-                  </td>
-
-
-
-              </tr>
-            ))}
-          </tbody>
-        </table> */}
+ 
       </div>
     </div>
   )

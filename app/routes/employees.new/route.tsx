@@ -1,157 +1,153 @@
 import { Form, redirect, type ActionFunction } from "react-router";
 import { getDB } from "~/db/getDB";
-import { Messages } from 'primereact/messages';
 import Navbar from "../navbar/navbar";
-import { useMountEffect } from 'primereact/hooks';
-import { useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+
+// Validation Schema
+const employeeSchema = yup.object().shape({
+  full_name: yup.string().required("Full Name is required"),
+  email: yup.string().email("Invalid email address").required("Email is required"),
+  phone: yup.string().required("phone is required"),
+  date_of_birth: yup
+    .date()
+    .required("Date of Birth is required")
+    .test("is-adult", "Employee must be at least 18 years old", (value) => {
+      if (!value) return false;
+      const age = new Date().getFullYear() - new Date(value).getFullYear();
+      return age >= 18;
+    }),
+  position: yup.string().required("Position is required"),
+  department: yup.string().required("Department is required"),
+  salary: yup.number().min(1500, "Salary must be at least $1500").required("Salary is required"),
+});
+
+// Server-side action to handle form submission
 export const action: ActionFunction = async ({ request }) => {
-  // Get form data from the request
+  console.log("Form submission started"); // Debugging
+
   const formData = await request.formData();
-  
-  // Extract the values for each field
+
   const full_name = formData.get("full_name");
   const email = formData.get("email");
-  const phone_number = formData.get("phone");
+  const phone = formData.get("phone");
+  const date_of_birth = formData.get("date_of_birth");
   const position = formData.get("position");
-  const salary = formData.get("salary");
   const department = formData.get("department");
-  const dob = formData.get("date_of_birth");
+  const salary = formData.get("salary");
 
-  const query = `
-  INSERT INTO employees (full_name, email, phone_number, date_of_birth, position, salary, residence)
-  VALUES (?, ?, ?, ?, ?, ?, ?)
-`;
-  
-  if (!full_name || !email || !phone_number || !dob || !position || !salary || !department) {
-   
-  }
-
-  // Connect to the database and run the insert query
   const db = await getDB();
   await db.run(
     `INSERT INTO employees (full_name, email, phone_number, date_of_birth, position, salary, department) 
      VALUES (?, ?, ?, ?, ?, ?, ?)`,
-    [full_name, email, phone_number, dob, position, salary, department]
+    [full_name, email, phone, date_of_birth, position, salary, department]
   );
 
-  // Redirect to the employees page after submission
   return redirect("/employees");
 };
 
 export default function NewEmployeePage() {
- return (
-    <div className="bg-gray-100">
-      {/* Navbar */}
-      <Navbar />
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(employeeSchema),
+  });
 
-      {/* Main content area */}
+  return (
+    <div className="bg-gray-100">
+      <Navbar />
       <div className="max-w-4xl mx-auto py-6 px-8 bg-white rounded-lg shadow-md mt-6">
         <h1 className="text-3xl font-semibold text-gray-900 mb-6">Create New Employee</h1>
 
-        {/* Form */}
-        <Form method="post" className="space-y-6">
-          {/* Username */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <div className="sm:col-span-2">
-              <label className="block text-sm font-medium text-gray-900">Username</label>
-              <input
-                type="text"
-                name="full_name"
-                id="full_name"
-                placeholder="janesmith"
-                required
-                className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-base text-gray-900 placeholder:text-gray-400"
-              />
-            </div>
-
-            {/* Email */}
-            <div className="sm:col-span-2">
-              <label className="block text-sm font-medium text-gray-900">Email</label>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                required
-                placeholder="janesmith@example.com"
-                className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-base text-gray-900 placeholder:text-gray-400"
-              />
-            </div>
-
-            {/* Phone Number */}
-            <div className="sm:col-span-2">
-              <label className="block text-sm font-medium text-gray-900">Phone Number</label>
-              <input
-                type="tel"
-                name="phone"
-                id="phone"
-                required
-                placeholder="(961) 70444555"
-                className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-base text-gray-900 placeholder:text-gray-400"
-              />
-            </div>
-
-            {/* Date of Birth */}
-            <div className="sm:col-span-2 sm:w-1/2">
-              <label className="block text-sm font-medium text-gray-900">Date of Birth</label>
-              <input id="date_of_birth" name="date_of_birth" type="date"
-                     required
-                     className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-base text-gray-900 placeholder:text-gray-400"
-/>
-
-
-            </div>
-
-            {/* Position */}
-            <div className="sm:col-span-2 sm:w-1/2">
-              <label className="block text-sm font-medium text-gray-900">Job Title</label>
-              <input
-                type="text"
-                name="position"
-                id="position"
-                required
-                placeholder="Software Engineer"
-                className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-base text-gray-900 placeholder:text-gray-400"
-              />
-            </div>
-            
-            {/* Department */}
-            <div className="sm:col-span-2 sm:w-1/2">
-              <label className="block text-sm font-medium text-gray-900">Department</label>
-              <input
-                type="text"
-                name="department"
-                id="department"
-                required
-                placeholder="Engineering"
-                className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-base text-gray-900 placeholder:text-gray-400"
-              />
-            </div>
-
-            {/* Salary */}
-            <div className="sm:col-span-2 sm:w-1/2">
-              <label className="block text-sm font-medium text-gray-900">Salary</label>
-              <input
-                type="number"
-                name="salary"
-                id="salary"
-                placeholder="50000"
-                required
-                className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-base text-gray-900 placeholder:text-gray-400"
-              />
-            </div>
-
-          
+        <Form method="post" className="space-y-6" >
+          {/* Full Name */}
+          <div>
+            <label className="block text-sm font-medium text-gray-900">Full Name</label>
+            <input
+              type="text"
+              {...register("full_name")}
+              className="w-full border p-2 rounded-md"
+            />
+            {errors.full_name && <p className="text-red-500 text-sm">{errors.full_name.message}</p>}
           </div>
 
-          {/* Submit and Cancel Buttons */}
+          {/* Email */}
+          <div>
+            <label className="block text-sm font-medium text-gray-900">Email</label>
+            <input
+              type="email"
+              {...register("email")}
+              className="w-full border p-2 rounded-md"
+            />
+            {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
+          </div>
+
+          {/* Phone Number */}
+          <div>
+            <label className="block text-sm font-medium text-gray-900">Phone Number</label>
+            <input
+              type="tel"
+              {...register("phone")}
+              className="w-full border p-2 rounded-md"
+            />
+            {errors.phone && <p className="text-red-500 text-sm">{errors.phone.message}</p>}
+          </div>
+
+          {/* Date of Birth */}
+          <div>
+            <label className="block text-sm font-medium text-gray-900">Date of Birth</label>
+            <input
+              type="date"
+              {...register("date_of_birth")}
+              className="w-full border p-2 rounded-md"
+            />
+            {errors.date_of_birth && <p className="text-red-500 text-sm">{errors.date_of_birth.message}</p>}
+          </div>
+
+          {/* Position */}
+          <div>
+            <label className="block text-sm font-medium text-gray-900">Position</label>
+            <input
+              type="text"
+              {...register("position")}
+              className="w-full border p-2 rounded-md"
+            />
+            {errors.position && <p className="text-red-500 text-sm">{errors.position.message}</p>}
+          </div>
+
+          {/* Department */}
+          <div>
+            <label className="block text-sm font-medium text-gray-900">Department</label>
+            <input
+              type="text"
+              {...register("department")}
+              className="w-full border p-2 rounded-md"
+            />
+            {errors.department && <p className="text-red-500 text-sm">{errors.department.message}</p>}
+          </div>
+
+          {/* Salary */}
+          <div>
+            <label className="block text-sm font-medium text-gray-900">Salary ($)</label>
+            <input
+              type="number"
+              {...register("salary")}
+              className="w-full border p-2 rounded-md"
+            />
+            {errors.salary && <p className="text-red-500 text-sm">{errors.salary.message}</p>}
+          </div>
+
+          {/* Submit Button */}
           <div className="mt-6 flex items-center justify-end gap-x-6">
             <button type="button" className="text-sm font-semibold text-gray-900">
-              <a href="/employees">Cancel
-              </a>
+              <a href="/employees">Cancel</a>
             </button>
             <button
               type="submit"
-              className="rounded-md bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-md hover:bg-indigo-500 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 "
+              className="bg-indigo-600 text-white p-2 rounded-md hover:bg-indigo-500"
             >
               Save
             </button>
@@ -159,10 +155,5 @@ export default function NewEmployeePage() {
         </Form>
       </div>
     </div>
-    
   );
 }
-
-
-
-

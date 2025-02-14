@@ -57,6 +57,7 @@ export default function EmployeePage() {
         <div className="sm:col-span-2">
           <label className="block text-sm font-medium text-gray-900">Username</label>
           <input
+            required
             type="text"
             name="full_name"
             id="full_name"
@@ -70,6 +71,7 @@ export default function EmployeePage() {
         <div className="sm:col-span-2">
           <label className="block text-sm font-medium text-gray-900">Email</label>
           <input
+            required
             type="email"
             name="email"
             id="email"
@@ -83,6 +85,7 @@ export default function EmployeePage() {
         <div className="sm:col-span-2">
           <label className="block text-sm font-medium text-gray-900">Phone Number</label>
           <input
+            required
             type="tel"
             name="phone"
             id="phone"
@@ -96,6 +99,7 @@ export default function EmployeePage() {
         <div className="sm:col-span-2 sm:w-1/2">
           <label className="block text-sm font-medium text-gray-900">Date of Birth</label>
           <input
+            required
             type="date"
             id="date_of_birth"
             name="date_of_birth"
@@ -108,6 +112,7 @@ export default function EmployeePage() {
         <div className="sm:col-span-2 sm:w-1/2">
           <label className="block text-sm font-medium text-gray-900">Job Title</label>
           <input
+           required
             type="text"
             name="position"
             id="position"
@@ -121,6 +126,7 @@ export default function EmployeePage() {
         <div className="sm:col-span-2 sm:w-1/2">
           <label className="block text-sm font-medium text-gray-900">Department</label>
           <input
+            required
             type="text"
             name="department"
             id="department"
@@ -134,6 +140,7 @@ export default function EmployeePage() {
         <div className="sm:col-span-2 sm:w-1/2">
           <label className="block text-sm font-medium text-gray-900">Salary</label>
           <input
+            required
             type="number"
             name="salary"
             id="salary"
